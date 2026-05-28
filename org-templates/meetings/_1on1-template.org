@@ -1,0 +1,14 @@
+#+TITLE: {{NAME}}
+#+CATEGORY: 1on1
+#+FILETAGS: :@{{slug}}:
+#+STARTUP: overview
+
+* About
+* Agenda
+  Structural reminders for every 1:1 — NOT a task list.
+  Discrete topics go in the task system tagged :@{{slug}}:agenda:
+  - Career / growth check-in (quarterly)
+  - Always end with: anything I should know?
+
+* Meetings
+

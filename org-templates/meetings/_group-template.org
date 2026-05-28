@@ -1,0 +1,11 @@
+#+TITLE: {{NAME}}
+#+CATEGORY: meeting
+#+FILETAGS: :{{slug}}:
+#+STARTUP: overview
+
+* Agenda
+  Structural reminders — NOT a task list.
+  Discrete topics go in the task system tagged :{{slug}}:agenda:
+
+* Meetings
+

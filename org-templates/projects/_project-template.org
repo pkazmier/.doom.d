@@ -1,0 +1,15 @@
+#+TITLE: {{PROJECT NAME}}
+#+CATEGORY: project
+#+FILETAGS: :{{tag}}:
+#+STARTUP: overview
+
+* Overview
+
+* Goals
+
+* Key People
+
+* Decisions
+
+* Meetings & Notes
+

@@ -203,6 +203,14 @@ Agenda items surface first; everything else follows.")
     :title title
     :super-groups my/org-super-agenda-person-groups))
 
+(defun my/org-all-agenda-items ()
+  "Show all agenda items tagged :agenda: grouped by person."
+  (interactive)
+  (org-ql-search (org-agenda-files)
+    '(and (tags "agenda") (not (done)))
+    :title "All agenda items"
+    :super-groups '((:auto-tags t))))  ; auto-groups by tag — one section per person
+
 (defun my/org-pick-task-view (prompt files tag-fn)
   "Pick from FILES (by #+TITLE), derive its tag via TAG-FN, open its task view."
   (let* ((choices
@@ -502,6 +510,7 @@ and surfaces in the relevant person/project task view."
 (map! :leader
       (:prefix ("n" . "notes")
        :desc "1:1 meeting note"        "1" #'my/org-1on1-note
+       :desc "View all agenda items"   "A" #'my/org-all-agenda-items
        :desc "Group meeting note"      "g" #'my/org-group-note
        :desc "Tasks for THIS file"     "O" #'my/org-tasks-for-current-file
        :desc "Tasks for a person"      "p" #'my/org-tasks-for-person

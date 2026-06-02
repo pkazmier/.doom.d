@@ -24,6 +24,45 @@
 ;; Sometimes I prefer to read docs full height
 (map! :leader :desc "Raise popup window" :n "w M" #'+popup/raise)
 
+;; Evil org missing this binding
+(map! :after org
+      :map org-mode-map
+      :localleader
+      :desc "Add note" "z" #'org-add-note)
+
+(map! :after org-ql-view
+      :map org-ql-view-map
+      :localleader
+      :desc "Add note" "z" #'org-add-note)
+
+(map! :after org-ql-view
+      :map org-ql-view-map
+      :leader
+      :desc "Save all org buffers" "f s" #'org-save-all-org-buffers)
+
+;; Need bindings to scroll the popup documentation window
+(map! :after corfu
+      :map corfu-popupinfo-map
+      "M-d" #'corfu-popupinfo-scroll-up
+      "M-u" #'corfu-popupinfo-scroll-down)
+
+(map! :after evil-org-agenda
+      :map evil-org-agenda-mode-map
+      :desc "Quit agenda window" "q" #'quit-window)
+
+
+;; Org keybindings (under Doom's SPC n "notes" prefix) ─────────────────────
+(map! :leader
+      (:prefix ("n" . "notes")
+       :desc "1:1 meeting note"        "1" #'my/org-1on1-note
+       :desc "View all agenda items"   "A" #'my/org-all-agenda-items
+       :desc "Group meeting note"      "g" #'my/org-group-note
+       :desc "Tasks for THIS file"     "O" #'my/org-tasks-for-current-file
+       :desc "Tasks for a person"      "p" #'my/org-tasks-for-person
+       :desc "Tasks for a project"     "P" #'my/org-tasks-for-project
+       :desc "New project"             "+" #'my/org-new-project
+       :desc "Remove file from agenda" "x" #'my/remove-from-agenda-files))
+
 ;;; ── Theme and faces ─────────────────────────────────────────────────────────
 
 (setq doom-theme 'doom-one
@@ -45,8 +84,6 @@
   (add-hook! writeroom-mode (display-line-numbers-mode (if writeroom-mode -1 1))))
 
 (after! corfu
-  (map! :map corfu-popupinfo-map "M-d" #'corfu-popupinfo-scroll-up)
-  (map! :map corfu-popupinfo-map "M-u" #'corfu-popupinfo-scroll-down)
   (setq corfu-auto-trigger "."))
 
 ;;; ── Fonts ───────────────────────────────────────────────────────────────────
@@ -156,10 +193,7 @@
           (:name "📂 Other open" :todo t :order 6)
           (:name "✅ Done today" :todo ("DONE" "CNCL") :order 7)))
   :config
-  (org-super-agenda-mode)
-
-  (after! evil-org-agenda
-    (define-key evil-org-agenda-mode-map (kbd "q") #'quit-window)))
+  (org-super-agenda-mode))
 
 
 ;;; ── Per-file / per-person / per-project task views ──────────────────────────
@@ -494,26 +528,3 @@ and surfaces in the relevant person/project task view."
       "* TODO %?\n  SCHEDULED: %^{First date}t\n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  ;; Add repeater: e.g. +1w, +2w, .+1m"
       :empty-lines 1))))
 
-;;; ── org-ql-view keybindings ──────────────────────────────────────────────────
-
-(after! org-ql
-  (map! :map org-ql-view-mode-map
-        "C-x C-s" #'org-save-all-org-buffers
-        :leader "f s" #'org-save-all-org-buffers))
-
-;;; ── Org keybindings (under Doom's SPC n "notes" prefix) ─────────────────────
-;; Generic actions reuse Doom's built-in notes bindings:
-;;   SPC n a  Org agenda      SPC n n  Org capture (task / agenda)
-;;   SPC n s  Search notes    SPC n f, SPC n r  find / roam
-;; Only the workflow-specific commands are bound here.
-
-(map! :leader
-      (:prefix ("n" . "notes")
-       :desc "1:1 meeting note"        "1" #'my/org-1on1-note
-       :desc "View all agenda items"   "A" #'my/org-all-agenda-items
-       :desc "Group meeting note"      "g" #'my/org-group-note
-       :desc "Tasks for THIS file"     "O" #'my/org-tasks-for-current-file
-       :desc "Tasks for a person"      "p" #'my/org-tasks-for-person
-       :desc "Tasks for a project"     "P" #'my/org-tasks-for-project
-       :desc "New project"             "+" #'my/org-new-project
-       :desc "Remove file from agenda" "x" #'my/remove-from-agenda-files))

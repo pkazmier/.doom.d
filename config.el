@@ -1,6 +1,6 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;;; -- General -----------------------------------------------------------------
+;;; ── General ─────────────────────────────────────────────────────────────────
 
 (setq completion-ignore-case t
       confirm-kill-emacs nil
@@ -9,7 +9,7 @@
 
 (load! "local")
 
-;;; -- Bindings ----------------------------------------------------------------
+;;; ── Bindings ────────────────────────────────────────────────────────────────
 
 ;; Escape is too far away
 (setq evil-escape-key-sequence "jk")
@@ -24,7 +24,7 @@
 ;; Sometimes I prefer to read docs full height
 (map! :leader :desc "Raise popup window" :n "w M" #'+popup/raise)
 
-;;; -- Theme and faces ---------------------------------------------------------
+;;; ── Theme and faces ─────────────────────────────────────────────────────────
 
 (setq doom-theme 'doom-one
       doom-modeline-height 35)
@@ -38,7 +38,7 @@
   '(org-document-title :inherit variable-pitch :height 1.4)
   '(org-super-agenda-header :inherit (doom-modeline-emphasis variable-pitch) :height 1.3 :weight bold))
 
-;;; -- Writeroom ---------------------------------------------------------------
+;;; ── Writeroom ───────────────────────────────────────────────────────────────
 
 (after! writeroom-mode
   (setq writeroom-width 40)
@@ -49,7 +49,7 @@
   (map! :map corfu-popupinfo-map "M-u" #'corfu-popupinfo-scroll-down)
   (setq corfu-auto-trigger "."))
 
-;;; Fonts -------------------------------------------------------------------
+;;; ── Fonts ───────────────────────────────────────────────────────────────────
 
 (setq doom-font-increment 1)
 
@@ -78,7 +78,7 @@
 (after! demap
   (add-hook! 'demap-minimap-window-set-hook (setq-local line-spacing nil)))
 
-;;; -- Org ---------------------------------------------------------------------
+;;; ── Org ─────────────────────────────────────────────────────────────────────
 
 ;; These must be set before org loads
 (setq org-directory "~/org/"
@@ -121,13 +121,13 @@
   (add-hook! org-mode
     (visual-fill-column-mode 1)))
 
-;;; ── Performance: pre-parse agenda files during idle time ─────────────────────
+;;; ── Performance: pre-parse agenda files during idle time ────────────────────
 
 ;; (after!
 ;;   org-agenda
 ;;   (run-with-idle-timer 5 t #'org-agenda-prepare-buffers org-agenda-files))
 
-;;; -- org-roam ----------------------------------------------------------------
+;;; ── org-roam ────────────────────────────────────────────────────────────────
 
 (after! org-roam
   ;; Auto-assign an ID to every org file on save so roam can index it.

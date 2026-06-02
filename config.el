@@ -486,6 +486,13 @@ and surfaces in the relevant person/project task view."
       "* TODO %?\n  SCHEDULED: %^{First date}t\n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  ;; Add repeater: e.g. +1w, +2w, .+1m"
       :empty-lines 1))))
 
+;;; ── org-ql-view keybindings ──────────────────────────────────────────────────
+
+(after! org-ql
+  (map! :map org-ql-view-mode-map
+        "C-x C-s" #'org-save-all-org-buffers
+        :leader "f s" #'org-save-all-org-buffers))
+
 ;;; ── Org keybindings (under Doom's SPC n "notes" prefix) ─────────────────────
 ;; Generic actions reuse Doom's built-in notes bindings:
 ;;   SPC n a  Org agenda      SPC n n  Org capture (task / agenda)

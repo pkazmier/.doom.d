@@ -87,7 +87,7 @@
 (after! org
   (setq org-log-done 'time
         org-log-into-drawer 'LOGBOOK
-        org-use-tag-inheritance t
+        org-use-tag-inheritance nil
         org-startup-folded 'overview
         org-hide-emphasis-markers t
         org-deadline-warning-days 14

@@ -128,7 +128,13 @@
         org-startup-folded 'overview
         org-hide-emphasis-markers t
         org-deadline-warning-days 14
-        org-agenda-start-on-weekday nil)
+        org-agenda-start-on-weekday nil
+        ;; Keep the global TODO list (SPC n t) focused on actionable items:
+        ;; scheduled/deadline items surface in the agenda on their date, so
+        ;; hide them from the flat todo list until then.
+        org-agenda-todo-ignore-scheduled 'future  ; hide future-scheduled todos
+        org-agenda-todo-ignore-deadlines 'far      ; hide deadlines beyond the 14-day warning window
+        org-agenda-todo-ignore-timestamp 'future)  ; hide future plain-timestamp todos
 
   ;; All files listed within .agenda-files are included in the agenda.
   ;; That file is auto populated when new 1:1s or group meetings occur.

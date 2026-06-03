@@ -334,7 +334,9 @@ so e.g. \"Brian Kaczmarek\" -> \"BrianKaczmarek\"."
 (defun my/goto-meetings-heading-and-insert ()
   "Find '* Meetings' and insert a new reverse-chronological dated entry."
   (goto-char (point-min))
-  (let ((stamp (format-time-string "<%Y-%m-%d %a>")))
+  ;; Inactive timestamp ([...] not <...>) so these meeting-record entries
+  ;; don't surface as phantom items in the org-agenda day view.
+  (let ((stamp (format-time-string "[%Y-%m-%d %a]")))
     (if (re-search-forward "^\\* Meetings" nil t)
         (progn
           (forward-line 1)

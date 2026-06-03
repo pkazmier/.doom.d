@@ -26,7 +26,7 @@
 
 ;; Evil org missing this binding
 (map! :after org
-      :map org-mode-map
+      :map (org-mode-map org-agenda-keymap)
       :localleader
       :desc "Add note" "z" #'org-add-note)
 

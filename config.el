@@ -160,6 +160,36 @@
            "DONE(d)"
            "CNCL(c)")))
 
+  ;; org-todo-list (SPC n t) has no native deadline display, so append a
+  ;; countdown to each item after the buffer is built, then let org re-align
+  ;; the tags around the longer headings.  A finalize-hook (rather than
+  ;; prefix-format) keeps the TODO keyword at a fixed column, preserving its
+  ;; reverse-video face.
+  (defun my/org-agenda-append-deadlines ()
+    (when (eq org-agenda-type 'todo)
+      (let ((inhibit-read-only t))
+        (save-excursion
+          (goto-char (point-min))
+          (while (not (eobp))
+            (when-let* ((marker (or (get-text-property (point) 'org-hd-marker)
+                                    (get-text-property (point) 'org-marker)))
+                        (dl (org-with-point-at marker (org-entry-get nil "DEADLINE")))
+                        (days (org-timestamp-to-now dl))
+                        (str (cond ((< days 0) (format "  [%dd overdue]" (- days)))
+                                   ((= days 0) "  [due today]")
+                                   (t          (format "  [due in %dd]" days)))))
+              ;; Insert at the end of the heading text, before any tag group;
+              ;; org-agenda-align-tags re-pads the tags afterward.
+              (beginning-of-line)
+              (if (re-search-forward org-tag-group-re (line-end-position) t)
+                  (goto-char (match-beginning 0))
+                (end-of-line))
+              (insert (propertize str 'face 'org-upcoming-deadline)))
+            (forward-line 1)))
+        (org-agenda-align-tags))))
+
+  (add-hook 'org-agenda-finalize-hook #'my/org-agenda-append-deadlines)
+
   ;; Soft wrap when writing notes in org mode.
   (add-hook! org-mode
     (visual-fill-column-mode 1)))

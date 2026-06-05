@@ -56,6 +56,7 @@
       (:prefix ("n" . "notes")
        :desc "1:1 meeting note"        "1" #'my/org-1on1-note
        :desc "View all agenda items"   "A" #'my/org-all-agenda-items
+       :desc "Ad hoc meeting note"      "a" #'my/org-adhoc-note
        :desc "Group meeting note"      "g" #'my/org-group-note
        :desc "Tasks for THIS file"     "O" #'my/org-tasks-for-current-file
        :desc "Tasks for a person"      "p" #'my/org-tasks-for-person
@@ -473,6 +474,19 @@ candidate list."
   (let ((note-buf (current-buffer)))
     (save-selected-window (my/org-tasks-for-current-file))
     (switch-to-buffer note-buf)))
+
+(defun my/org-adhoc-note ()
+  "Open adhoc.org, insert a new dated heading under Meetings, point after date."
+  (interactive)
+  (find-file (expand-file-name "meetings/adhoc.org" org-directory))
+  (goto-char (point-min))
+  (let ((stamp (format-time-string "[%Y-%m-%d %a]")))
+    (if (re-search-forward "^\\* Meetings" nil t)
+        (progn
+          (forward-line 1)
+          (insert (concat "\n** " stamp " ")))
+      (goto-char (point-max))
+      (insert (concat "\n* Meetings\n\n** " stamp " ")))))
 
 ;;; ── Project creation ─────────────────────────────────────────────────────────
 

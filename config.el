@@ -194,7 +194,7 @@
             (forward-line 1)))
         (org-agenda-align-tags))))
 
-  (add-hook 'org-agenda-finalize-hook #'my/org-agenda-append-deadlines)
+  (add-hook! 'org-agenda-finalize-hook #'my/org-agenda-append-deadlines)
 
   ;; Soft wrap when writing notes in org mode.
   (add-hook! org-mode
@@ -238,6 +238,39 @@
   :config
   (org-super-agenda-mode))
 
+
+;;; ── org-modern chicklet fix for org-ql-view ─────────────────────────────────
+;; org-modern-agenda finds todo keywords by reading the 'org-not-done-regexp
+;; text property, which org-agenda sets on every item but org-ql-view never
+;; does.  Apply the same display+face treatment directly, after org-modern-agenda
+;; has already run for real agenda lines (depth 5 > default 0).
+(after! org-modern
+  (defun my/org-ql-view-apply-modern-todo ()
+    (when org-modern-todo
+      (save-excursion
+        (goto-char (point-min))
+        (while (not (eobp))
+          (when-let* ((kw (get-text-property (point) 'todo-state))
+                      ((not (get-text-property (point) 'org-not-done-regexp)))
+                      (re (concat " \\(" (regexp-quote kw) "\\) "))
+                      ((re-search-forward re (line-end-position) t))
+                      (beg (match-beginning 1))
+                      (end (match-end 1))
+                      (face (if-let* ((f (or (cdr (assoc kw org-modern-todo-faces))
+                                             (cdr (assq t org-modern-todo-faces)))))
+                                `(,f org-modern-label)
+                              (if (member kw org-done-keywords-for-agenda)
+                                  'org-modern-done
+                                'org-modern-todo))))
+            ;; Pad the keyword's edges with spaces so the label has breathing room.
+            (put-text-property beg (1+ beg) 'display
+                               (format #(" %c" 1 3 (cursor t)) (char-after beg)))
+            (put-text-property (1- end) end 'display
+                               (string (char-before end) ?\s))
+            (put-text-property beg end 'face face))
+          (forward-line 1)))))
+
+  (add-hook! 'org-agenda-finalize-hook :depth 5 #'my/org-ql-view-apply-modern-todo))
 
 ;;; ── Per-file / per-person / per-project task views ──────────────────────────
 

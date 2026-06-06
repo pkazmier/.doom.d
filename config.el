@@ -35,6 +35,11 @@
       :localleader
       :desc "Add note" "z" #'org-add-note)
 
+(map! :after org
+      :map org-agenda-keymap
+      :leader
+      :desc "Save all org buffers" "f s" #'org-save-all-org-buffers)
+
 (map! :after org-ql-view
       :map org-ql-view-map
       :leader

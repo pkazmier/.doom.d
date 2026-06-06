@@ -55,13 +55,12 @@
       :map evil-org-agenda-mode-map
       :desc "Quit agenda window" "q" #'quit-window)
 
-
 ;; Org keybindings (under Doom's SPC n "notes" prefix) ─────────────────────
 (map! :leader
       (:prefix ("n" . "notes")
        :desc "1:1 meeting note"        "1" #'my/org-1on1-note
        :desc "View all agenda items"   "A" #'my/org-all-agenda-items
-       :desc "Ad hoc meeting note"      "a" #'my/org-adhoc-note
+       :desc "Ad hoc meeting note"     "a" #'my/org-adhoc-note
        :desc "Group meeting note"      "g" #'my/org-group-note
        :desc "Tasks for THIS file"     "O" #'my/org-tasks-for-current-file
        :desc "Tasks for a person"      "p" #'my/org-tasks-for-person
@@ -226,15 +225,9 @@
   :after org-agenda
   :init
   (setq org-super-agenda-groups
-        '((:discard (:tag "agenda"))
-          (:name "🔥 Overdue" :deadline past :order 1)
-          (:name "📅 Today" :scheduled today :deadline today :order 2)
-          (:name "📆 Upcoming deadlines" :deadline future :order 3)
-          (:name "⭐ High priority" :priority "A" :order 4)
-          (:name "⏭ NEXT actions" :todo "NEXT" :order 5)
-          (:name "⏳ Waiting" :todo ("WAIT") :order 6)
-          (:name "📂 Other open" :todo t :order 7)
-          (:name "✅ Done today" :todo ("DONE" "CNCL") :order 8)))
+        `((:discard (:tag "agenda"))
+          ,@my/org-super-agenda-base-groups
+          (:name "📂 Other open" :todo t)))
   :config
   (org-super-agenda-mode))
 
@@ -274,14 +267,18 @@
 
 ;;; ── Per-file / per-person / per-project task views ──────────────────────────
 
+(defvar my/org-super-agenda-base-groups
+  '((:name "🔥 Overdue"            :deadline past)
+    (:name "📅 Today"              :scheduled today :deadline today)
+    (:name "📆 Deadlines"          :deadline future)
+    (:name "⭐ High priority"      :priority "A")
+    (:name "⏭ Next action"        :todo ("NEXT"))
+    (:name "⏳ Waiting"            :todo ("WAIT")))
+  "Shared super-agenda groups reused across global and per-person views.")
+
 (defvar my/org-super-agenda-person-groups
-  '((:name "📋 For next meeting" :tag "agenda")
-    (:name "🔥 Overdue" :deadline past)
-    (:name "📅 Today" :scheduled today :deadline today)
-    (:name "📆 Upcoming deadlines" :deadline future)
-    (:name "⭐ High priority" :priority "A")
-    (:name "⏭ NEXT" :todo "NEXT")
-    (:name "⏳ Waiting" :todo ("WAIT"))
+  `((:name "📋 For next meeting" :tag "agenda")
+    ,@my/org-super-agenda-base-groups
     (:name "📂 Other open" :anything t))
   "Super-agenda groups for per-person and per-project task views.
 Agenda items surface first; everything else follows.")

@@ -66,7 +66,7 @@
 
 ;;; ── Theme and faces ─────────────────────────────────────────────────────────
 
-(setq doom-theme 'doom-one
+(setq doom-theme 'compline
       doom-modeline-height 35)
 
 (custom-set-faces!
@@ -581,4 +581,3 @@ and surfaces in the relevant person/project task view."
       (file ,(expand-file-name "recurring.org" org-directory))
       "* TODO %?\n  SCHEDULED: %^{First date}t\n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  ;; Add repeater: e.g. +1w, +2w, .+1m"
       :empty-lines 1))))
-
